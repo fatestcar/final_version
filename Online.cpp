@@ -101,7 +101,7 @@ int main() {
     setIdentity(kf.errorCovPost, Scalar::all(1));
 
     String video_path = "./VID.mp4";
-    VideoCapture capture(video_path);
+    VideoCapture capture(0);
 
     bool first = false;
 

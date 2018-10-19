@@ -48,7 +48,7 @@ double last_value = 0;
 
 double offset = 0;
 
-mutex m;
+//mutex m;
 
 double getDistance(double k1, double k2){
     double rightDistance = abs(z/k2);
@@ -64,7 +64,7 @@ void pid(){
     controlLeft(FORWARD,5);
     controlRight(FORWARD,5);
     while(true){
-        lock_guard<mutex> lockGuard(m);
+//        lock_guard<mutex> lockGuard(m);
         PID_Controller(offset);
     }
 }
@@ -143,7 +143,7 @@ int main() {
 //        cout << k1 << " " << k2 <<endl;
 
         if(l.isRightEmpty() && l.isLeftEmpty()){
-            lock_guard<mutex> lockGuard(m);
+//            lock_guard<mutex> lockGuard(m);
             if(isRight){
                 offset = 20;
                 cout << 20 <<endl;
@@ -152,17 +152,17 @@ int main() {
                 cout << -20 << endl;
             }
         }else if(l.isLeftEmpty()){
-            lock_guard<mutex> lockGuard(m);
+//            lock_guard<mutex> lockGuard(m);
             isRight = true;
             offset = 20;
             cout << "left empty" << endl;
         }else if(l.isRightEmpty()){
-            lock_guard<mutex> lockGuard(m);
+//            lock_guard<mutex> lockGuard(m);
             isRight = false;
             offset = -20;
             cout << "right empty" << endl;
         }else{
-            lock_guard<mutex> lockGuard(m);
+//            lock_guard<mutex> lockGuard(m);
             offset = 25 - getDistance(k1,k2);
             if(offset > 0) isRight = true;
             else isRight = false;
@@ -191,9 +191,9 @@ int main() {
         measurement.at<float>(7) = l.getRight()[3];
         kf.correct(measurement);
 //        cout<<state<<endl;
-        imshow("img", frame);
-        if(!waitKey(1))
-            break;
+//        imshow("img", frame);
+//        if(!waitKey(1))
+//            break;
     }
     t.join();
     return 0;

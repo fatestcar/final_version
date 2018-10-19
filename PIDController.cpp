@@ -60,7 +60,7 @@ double PID_Controller(double pos){
     double output=getOutput(Ux);
     //在这里输出转动角度
     turnTo(int(output));
-    delay(1000)
+//    delay(1000)
 
     return output;//返回要输出的角度
 }

@@ -233,6 +233,11 @@ double PID_Controller(double pos){
     double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
     int output=(int)getOutput(Ux);
     //在这里输出转动角度
+    if(output>45){
+        output=45;
+    }else if(output<-45){
+        output=-45;
+    }
     turnTo(output);
 
     //根据当前车的位置范围控制车速，避免在急转弯时车速过快

@@ -19,10 +19,10 @@ using namespace GPIO;
 
 const double d_max=15.0;//前轮中心在中轴线右侧的最大距离 单位：cm
 const double v=5.0;    //恒定速度  单位：cm/s
-const double l_max=45.0;//最大转动角度
-const double kp=0.5;
+const double l_max=60.0;//最大转动角度
+const double kp=0.6;
 const double ki=0.0;
-const double kd=0.1;
+const double kd=0.15;
 
 double currentError=0.0;//当前时刻偏差
 double lastError=0.0;//上一时刻偏差
@@ -209,7 +209,7 @@ double getOutput(double x){
         x=d_max;
     }
     //将PID算法对于距离的调整输出转化为对于转动角度的输出
-    res=x*(l_max/d_max);
+    res=x*4;// lmax/dmax
     return res;
 }
 
@@ -231,9 +231,21 @@ double PID_Controller(double pos){
     currentError=error;
     sigmaError=sigmaError+error;
     double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
-    double output=getOutput(Ux);
+    int output=(int)getOutput(Ux);
     //在这里输出转动角度
-    turnTo(int(output));
+    turnTo(output);
+
+    //根据当前车的位置范围控制车速，避免在急转弯时车速过快
+    if(pos<-10||pos>10){
+        controlLeft(FORWARD,2);
+        controlRight(FORWARD,2);
+    }else if(pos<-5||pos>5){
+        controlLeft(FORWARD,4);
+        controlRight(FORWARD,4);
+    }else{
+        controlLeft(FORWARD,6);
+        controlRight(FORWARD,6);
+    }
 //    delay(1000);
 
     return output;//返回要输出的角度

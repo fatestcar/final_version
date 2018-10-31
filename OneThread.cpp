@@ -181,6 +181,9 @@ int main() {
         measurement.at<float>(6) = l.getRight()[2];
         measurement.at<float>(7) = l.getRight()[3];
         kf.correct(measurement);
+        imshow("img", frame);
+        if(!waitKey(1))
+            break;
     }
 
     return 0;
@@ -229,14 +232,14 @@ double PID_Controller(double pos){
 
     //根据当前车的位置范围控制车速，避免在急转弯时车速过快
     if(pos<-10||pos>10){
-        controlLeft(FORWARD,2);
-        controlRight(FORWARD,2);
+        controlLeft(FORWARD,4);
+        controlRight(FORWARD,4);
     }else if(pos<-5||pos>5){
         controlLeft(FORWARD,4);
         controlRight(FORWARD,4);
     }else{
-        controlLeft(FORWARD,6);
-        controlRight(FORWARD,6);
+        controlLeft(FORWARD,5);
+        controlRight(FORWARD,5);
     }
 //    delay(1000);
     return output;//返回要输出的角度

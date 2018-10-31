@@ -182,7 +182,6 @@ int main() {
         measurement.at<float>(7) = l.getRight()[3];
         kf.correct(measurement);
     }
-    t.join();
     return 0;
 }
 

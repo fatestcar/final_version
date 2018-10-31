@@ -90,8 +90,8 @@ int main() {
     String video_path = "./VID.mp4";
     VideoCapture capture(0);
 
-    int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH);
-    int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+    int frame_width = capture.get(CV_CAP_PROP_FRAME_WIDTH);
+    int frame_height = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
 
     // Define the codec and create VideoWriter object.The output is stored in 'outcpp.avi' file.
     VideoWriter video("outcpp.avi",CV_FOURCC('M','J','P','G'),10, Size(frame_width,frame_height));
@@ -169,8 +169,8 @@ int main() {
         }
         cout << offset << endl;
         double output =  PID_Controller(offset);
-        putText(frame, "current pos " + offset + " angle "+output , cvPoint(400,500),
-                FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+//        putText(frame, "current pos " + offset + " angle "+output , cvPoint(400,500),
+//                FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         video.write(frame);
         measurement.at<float>(0) = l.getLeft()[0];
         measurement.at<float>(1) = l.getLeft()[1];
@@ -182,6 +182,7 @@ int main() {
         measurement.at<float>(7) = l.getRight()[3];
         kf.correct(measurement);
     }
+
     return 0;
 }
 

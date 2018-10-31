@@ -8,19 +8,46 @@ Detector::Detector(int road_horizon) {
 
 
 Lanes Detector::detect(Mat frame) {
+//    Mat grey;
+//    // 二值化
+//    cvtColor(frame, grey, COLOR_RGB2GRAY);
+//    // 自适应，降低明暗影响
+//    adaptiveThreshold(grey, grey, 255, CV_ADAPTIVE_THRESH_MEAN_C,
+//                      THRESH_BINARY_INV, 11, 1);
+//
+//    // 腐蚀膨胀去除斑点
+//    Mat kernel;
+//    kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
+//    morphologyEx(grey, grey, MORPH_OPEN, kernel);
+//    kernel = getStructuringElement(MORPH_RECT, Size(7, 7));
+//    morphologyEx(grey, grey, MORPH_CLOSE, kernel);
+//
+//    kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+//    morphologyEx(grey, grey, MORPH_OPEN, kernel);
+//    kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
+//    morphologyEx(grey, grey, MORPH_CLOSE, kernel);
+//
+//    // 高斯模糊
+//    GaussianBlur(grey, grey, Size(3, 3), 2.0);
+//    // 霍夫概率
+//    Mat roi = grey(Range(road_horizon, frame.rows), Range(0, frame.cols));
+//    Mat contours;
+//    Canny(roi, contours, 60, 130);
+//    vector<Vec4i> lines;
+//    HoughLinesP(contours, lines, 1, M_PI / 180, 50, 40, 150);
     Mat grey;
     // 二值化
     cvtColor(frame, grey, COLOR_RGB2GRAY);
     // 自适应，降低明暗影响
-    adaptiveThreshold(grey, grey, 255, CV_ADAPTIVE_THRESH_MEAN_C,
-                      THRESH_BINARY_INV, 11, 1);
+    threshold(grey, grey, 110, 255,
+              THRESH_BINARY_INV);
 
     // 腐蚀膨胀去除斑点
     Mat kernel;
-    kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
-    morphologyEx(grey, grey, MORPH_OPEN, kernel);
-    kernel = getStructuringElement(MORPH_RECT, Size(7, 7));
-    morphologyEx(grey, grey, MORPH_CLOSE, kernel);
+//        kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
+//        morphologyEx(grey, grey, MORPH_OPEN, kernel);
+//        kernel = getStructuringElement(MORPH_RECT, Size(7, 7));
+//        morphologyEx(grey, grey, MORPH_CLOSE, kernel);
 
     kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
     morphologyEx(grey, grey, MORPH_OPEN, kernel);
@@ -35,6 +62,8 @@ Lanes Detector::detect(Mat frame) {
     Canny(roi, contours, 60, 130);
     vector<Vec4i> lines;
     HoughLinesP(contours, lines, 1, M_PI / 180, 50, 40, 150);
+
+
     Vec4i left;
     Vec4i right;
     double left_dist = DIST_MIN;

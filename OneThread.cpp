@@ -108,35 +108,42 @@ int main() {
         Mat frame;
         capture.read(frame);
         Lanes l= detector.detect(frame);
-        if(!first) {
-            kf.statePost = (Mat_<float>(16, 1) <<
-                                               (float)l.getLeft()[0],
-                    (float)l.getLeft()[1],
-                    (float)l.getLeft()[2],
-                    (float)l.getLeft()[3],
-                    (float)l.getRight()[0],
-                    (float)l.getRight()[1],
-                    (float)l.getRight()[2],
-                    (float)l.getRight()[3],
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0);
-            first = true;
-        }
-        state = kf.predict();
+//        if(!first) {
+//            kf.statePost = (Mat_<float>(16, 1) <<
+//                                               (float)l.getLeft()[0],
+//                    (float)l.getLeft()[1],
+//                    (float)l.getLeft()[2],
+//                    (float)l.getLeft()[3],
+//                    (float)l.getRight()[0],
+//                    (float)l.getRight()[1],
+//                    (float)l.getRight()[2],
+//                    (float)l.getRight()[3],
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0);
+//            first = true;
+//        }
+//        state = kf.predict();
+//        if(!l.isEmpty()) {
+//            line(frame, Point(state.at<float>(0), state.at<float>(1)), Point(state.at<float>(2), state.at<float>(3)), Scalar(0, 0, 255), 3);
+//            line(frame, Point(state.at<float>(4), state.at<float>(5)), Point(state.at<float>(6), state.at<float>(7)), Scalar(0, 0, 255), 3);
+//        }
+//
+//        double k1 = (state.at<float>(3) -  state.at<float>(1))/(state.at<float>(2) - state.at<float>(0));
+//        double k2 = (state.at<float>(7) -  state.at<float>(5))/(state.at<float>(6) - state.at<float>(4));
+
         if(!l.isEmpty()) {
-          //  line(frame, Point(state.at<float>(0), state.at<float>(1)), Point(state.at<float>(2), state.at<float>(3)), Scalar(0, 0, 255), 3);
-          //  line(frame, Point(state.at<float>(4), state.at<float>(5)), Point(state.at<float>(6), state.at<float>(7)), Scalar(0, 0, 255), 3);
+            line(frame, Point((float)l.getLeft()[0], (float)l.getLeft()[1]), Point((float)l.getLeft()[2], (float)l.getLeft()[3]), Scalar(0, 0, 255), 3);
+            line(frame, Point((float)l.getRight()[0], (float)l.getRight()[1]), Point((float)l.getRight()[2], (float)l.getRight()[3]), Scalar(0, 0, 255), 3);
         }
 
-        double k1 = (state.at<float>(3) -  state.at<float>(1))/(state.at<float>(2) - state.at<float>(0));
-        double k2 = (state.at<float>(7) -  state.at<float>(5))/(state.at<float>(6) - state.at<float>(4));
-
+        double k1 = ((float)l.getLeft()[3] -   (float)l.getLeft()[1])/((float)l.getLeft()[2] - (float)l.getLeft()[0]);
+        double k2 = ((float)l.getRight()[3] -  (float)l.getRight()[1])/((float)l.getRight()[2] - (float)l.getRight()[0]);
 
         if(l.isRightEmpty() && l.isLeftEmpty()){
             if(isRight){
@@ -180,20 +187,19 @@ int main() {
         putText(frame, b, cvPoint(100,150),
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         video.write(frame);
-        measurement.at<float>(0) = l.getLeft()[0];
-        measurement.at<float>(1) = l.getLeft()[1];
-        measurement.at<float>(2) = l.getLeft()[2];
-        measurement.at<float>(3) = l.getLeft()[3];
-        measurement.at<float>(4) = l.getRight()[0];
-        measurement.at<float>(5) = l.getRight()[1];
-        measurement.at<float>(6) = l.getRight()[2];
-        measurement.at<float>(7) = l.getRight()[3];
-        kf.correct(measurement);
+//        measurement.at<float>(0) = l.getLeft()[0];
+//        measurement.at<float>(1) = l.getLeft()[1];
+//        measurement.at<float>(2) = l.getLeft()[2];
+//        measurement.at<float>(3) = l.getLeft()[3];
+//        measurement.at<float>(4) = l.getRight()[0];
+//        measurement.at<float>(5) = l.getRight()[1];
+//        measurement.at<float>(6) = l.getRight()[2];
+//        measurement.at<float>(7) = l.getRight()[3];
+//        kf.correct(measurement);
         imshow("img", frame);
         if(!waitKey(1))
             break;
     }
-
     return 0;
 }
 
@@ -229,7 +235,7 @@ double PID_Controller(double pos){
     currentError=error;
     sigmaError=sigmaError+error;
     double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
-	cout <<Ux <<endl;
+	cout << Ux <<endl;
     int output=(int)getOutput(Ux);
 	cout <<output <<endl;
     //在这里输出转动角度
@@ -237,7 +243,6 @@ double PID_Controller(double pos){
         output=15;
         controlLeft(FORWARD,6);
         controlRight(FORWARD,6);
-        
     }else if(output<=-15){
         output=-15;
         controlLeft(FORWARD,6);

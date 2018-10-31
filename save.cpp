@@ -44,7 +44,7 @@ int main(){
 
 
 
-        putText(frame, a , cvPoint(400,500),
+        putText(frame, a , cvPoint(00,500),
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         // Write the frame into the file 'outcpp.avi'
         video.write(frame);

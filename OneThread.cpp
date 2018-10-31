@@ -175,9 +175,9 @@ int main() {
         char b[16];
         sprintf(a,"%f", offset);
         sprintf(b,"%f", output);
-        putText(frame, a, cvPoint(400,500),
+        putText(frame, a, cvPoint(100,100),
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
-        putText(frame, b, cvPoint(400,550),
+        putText(frame, b, cvPoint(100,150),
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         video.write(frame);
         measurement.at<float>(0) = l.getLeft()[0];
@@ -193,7 +193,6 @@ int main() {
         if(!waitKey(1))
             break;
     }
-
     return 0;
 }
 

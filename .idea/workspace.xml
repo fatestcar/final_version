@@ -11,13 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1251bac0-ede6-45b6-ad61-ead62c9873f1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Detector.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Detector.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lanes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Lanes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OneThread.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/OneThread.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outcpp.avi" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,7 +67,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/OneThread.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1548">
+            <state relative-caret-position="-1184">
               <caret line="142" column="9" lean-forward="true" selection-start-line="142" selection-start-column="9" selection-end-line="142" selection-end-column="9" />
             </state>
           </provider>
@@ -216,12 +209,12 @@
       <updated>1539907717616</updated>
       <workItem from="1539907719007" duration="1742000" />
       <workItem from="1540967103038" duration="7834000" />
-      <workItem from="1541000031092" duration="2058000" />
+      <workItem from="1541000031092" duration="2450000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11634000" />
+    <option name="totallyTimeSpent" value="12026000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="951" extended-state="0" />
@@ -304,7 +297,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/OneThread.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1548">
+        <state relative-caret-position="-1184">
           <caret line="142" column="9" lean-forward="true" selection-start-line="142" selection-start-column="9" selection-end-line="142" selection-end-column="9" />
         </state>
       </provider>

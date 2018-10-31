@@ -85,8 +85,8 @@ int main() {
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
     );
     setIdentity(kf.measurementMatrix);
-    setIdentity(kf.processNoiseCov, Scalar::all(1e-2));
-    setIdentity(kf.measurementNoiseCov, Scalar::all(1e-1));
+    setIdentity(kf.processNoiseCov, Scalar::all(1e-5));
+    setIdentity(kf.measurementNoiseCov, Scalar::all(1e-3));
     setIdentity(kf.errorCovPost, Scalar::all(1));
 
     String video_path = "./VID.mp4";
@@ -130,8 +130,8 @@ int main() {
         }
         state = kf.predict();
         if(!l.isEmpty()) {
-            line(frame, Point(state.at<float>(0), state.at<float>(1)), Point(state.at<float>(2), state.at<float>(3)), Scalar(0, 0, 255), 3);
-            line(frame, Point(state.at<float>(4), state.at<float>(5)), Point(state.at<float>(6), state.at<float>(7)), Scalar(0, 0, 255), 3);
+          //  line(frame, Point(state.at<float>(0), state.at<float>(1)), Point(state.at<float>(2), state.at<float>(3)), Scalar(0, 0, 255), 3);
+          //  line(frame, Point(state.at<float>(4), state.at<float>(5)), Point(state.at<float>(6), state.at<float>(7)), Scalar(0, 0, 255), 3);
         }
 
         double k1 = (state.at<float>(3) -  state.at<float>(1))/(state.at<float>(2) - state.at<float>(0));
@@ -141,19 +141,19 @@ int main() {
         if(l.isRightEmpty() && l.isLeftEmpty()){
             if(isRight){
                 offset = 20;
-                cout << 20 <<endl;
+             //   cout << 20 <<endl;
             }else{
                 offset = -20;
-                cout << -20 << endl;
+            //    cout << -20 << endl;
             }
         }else if(l.isLeftEmpty()){
             isRight = true;
             offset = 20;
-            cout << "left empty" << endl;
+           // cout << "left empty" << endl;
         }else if(l.isRightEmpty()){
             isRight = false;
             offset = -20;
-            cout << "right empty" << endl;
+            //cout << "right empty" << endl;
         }else{
             offset = 25 - getDistance(k1,k2);
             if(offset > 0) isRight = true;
@@ -163,13 +163,13 @@ int main() {
                 isFirst = false;
             }
 //            if(abs(last_value - offset) > max_d){
-//                cout << "exceed" << endl;
+//               // cout << "exceed" << endl;
 //                offset = last_value;
 //            }else{
 //                last_value = offset;
 //            }
         }
-        cout << offset << endl;
+       // cout << offset << endl;
         double output =  PID_Controller(offset);
         char a[16];
         char b[16];
@@ -206,7 +206,7 @@ double getOutput(double x){
         x=d_max;
     }
     //将PID算法对于距离的调整输出转化为对于转动角度的输出
-    res=x*4;// lmax/dmax
+    res=x*2;// lmax/dmax
     return res;
 }
 
@@ -228,16 +228,24 @@ double PID_Controller(double pos){
     currentError=error;
     sigmaError=sigmaError+error;
     double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
+	cout <<Ux <<endl;
     int output=(int)getOutput(Ux);
+	cout <<output <<endl;
     //在这里输出转动角度
-    if(output>45){
-        output=45;
-    }else if(output<-45){
-        output=-45;
+    if(output>=15){
+        output=15;
+        controlLeft(FORWARD,6);
+        controlRight(FORWARD,6);
+        
+    }else if(output<=-15){
+        output=-15;
+        controlLeft(FORWARD,6);
+        controlRight(FORWARD,6);
     }
     turnTo(output);
 
     //根据当前车的位置范围控制车速，避免在急转弯时车速过快
+    /*
     if(pos<-10||pos>10){
         controlLeft(FORWARD,4);
         controlRight(FORWARD,4);
@@ -248,6 +256,7 @@ double PID_Controller(double pos){
         controlLeft(FORWARD,5);
         controlRight(FORWARD,5);
     }
+    */
 //    delay(1000);
     return output;//返回要输出的角度
 }

@@ -1,6 +1,7 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
-
+#include <stdio.h>
+#include <string>
 using namespace std;
 using namespace cv;
 
@@ -33,8 +34,17 @@ int main(){
         if (frame.empty())
             break;
 
+        double offset = 0;
+        double output = 0;
 
-        putText(frame, "Differencing the two images.", cvPoint(400,500),
+        char a[16];
+        char b[16];
+        sprintf(a,"%f", offset);
+        sprintf(b,"%f", output);
+
+
+
+        putText(frame, a , cvPoint(400,500),
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         // Write the frame into the file 'outcpp.avi'
         video.write(frame);

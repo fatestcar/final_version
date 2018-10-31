@@ -11,6 +11,8 @@
 #include "Detector.h"
 #include "GPIOlib.h"
 #include <thread>
+#include <stdio.h>
+#include <string>
 #define DIST_MAX 1000000
 #define DIST_MIN -1000000
 using namespace std;
@@ -169,8 +171,14 @@ int main() {
         }
         cout << offset << endl;
         double output =  PID_Controller(offset);
-//        putText(frame, "current pos " + offset + " angle "+output , cvPoint(400,500),
-//                FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+        char a[16];
+        char b[16];
+        sprintf(a,"%f", offset);
+        sprintf(b,"%f", output);
+        putText(frame, a, cvPoint(400,500),
+                FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+        putText(frame, b, cvPoint(400,550),
+                FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         video.write(frame);
         measurement.at<float>(0) = l.getLeft()[0];
         measurement.at<float>(1) = l.getLeft()[1];

@@ -24,11 +24,13 @@ const double v=5.0;    //恒定速度  单位：cm/s
 const double l_max=60.0;//最大转动角度
 const double kp=0.6;
 const double ki=0.0;
-const double kd=0.15;
+const double kd=0.25;
 
 double currentError=0.0;//当前时刻偏差
 double lastError=0.0;//上一时刻偏差
 double sigmaError=0.0;//累计偏差
+
+int max_count=0;
 
 
 double getOutput(double x);
@@ -239,30 +241,32 @@ double PID_Controller(double pos){
     int output=(int)getOutput(Ux);
 	cout <<output <<endl;
     //在这里输出转动角度
-    if(output>=15){
+    if(output>=15 && max_count<=3){
         output=15;
         controlLeft(FORWARD,6);
         controlRight(FORWARD,6);
-    }else if(output<=-15){
+        max_count=max_count+1;
+    }else if(output<=-15 && max_count<=3){
         output=-15;
         controlLeft(FORWARD,6);
         controlRight(FORWARD,6);
+        max_count=max_count+1;
+    }else if(max_count<=3 && (output<15||output>-15)){
+        controlLeft(FORWARD,5);
+        controlRight(FORWARD,5);
+    }
+
+    if(max_count>3){
+        max_count=0;
+        output=0;
+        controlLeft(FORWARD,4);
+        controlRight(FORWARD,4);
+        //中断减速操作
     }
     turnTo(output);
 
     //根据当前车的位置范围控制车速，避免在急转弯时车速过快
-    /*
-    if(pos<-10||pos>10){
-        controlLeft(FORWARD,4);
-        controlRight(FORWARD,4);
-    }else if(pos<-5||pos>5){
-        controlLeft(FORWARD,4);
-        controlRight(FORWARD,4);
-    }else{
-        controlLeft(FORWARD,5);
-        controlRight(FORWARD,5);
-    }
-    */
+
 //    delay(1000);
     return output;//返回要输出的角度
 }

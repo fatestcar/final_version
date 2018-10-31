@@ -70,35 +70,36 @@ int main() {
         Mat frame;
         capture.read(frame);
         Lanes l= detector.detect(frame);
-        if(!first) {
-            kf.statePost = (Mat_<float>(16, 1) <<
-                    (float)l.getLeft()[0],
-                    (float)l.getLeft()[1],
-                    (float)l.getLeft()[2],
-                    (float)l.getLeft()[3],
-                    (float)l.getRight()[0],
-                    (float)l.getRight()[1],
-                    (float)l.getRight()[2],
-                    (float)l.getRight()[3],
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0);
+//        if(!first) {
+//            kf.statePost = (Mat_<float>(16, 1) <<
+//                    (float)l.getLeft()[0],
+//                    (float)l.getLeft()[1],
+//                    (float)l.getLeft()[2],
+//                    (float)l.getLeft()[3],
+//                    (float)l.getRight()[0],
+//                    (float)l.getRight()[1],
+//                    (float)l.getRight()[2],
+//                    (float)l.getRight()[3],
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0);
+//
+//            first = true;
+//        }
+//        state = kf.predict();
 
-            first = true;
-        }
-        state = kf.predict();
         if(!l.isEmpty()) {
-            line(frame, Point(state.at<float>(0), state.at<float>(1)), Point(state.at<float>(2), state.at<float>(3)), Scalar(0, 0, 255), 3);
-            line(frame, Point(state.at<float>(4), state.at<float>(5)), Point(state.at<float>(6), state.at<float>(7)), Scalar(0, 0, 255), 3);
+            line(frame, Point((float)l.getLeft()[0], (float)l.getLeft()[1]), Point((float)l.getLeft()[2], (float)l.getLeft()[3]), Scalar(0, 0, 255), 3);
+            line(frame, Point((float)l.getRight()[0], (float)l.getRight()[1]), Point((float)l.getRight()[2], (float)l.getRight()[3]), Scalar(0, 0, 255), 3);
         }
 
-        double k1 = (state.at<float>(3) -  state.at<float>(1))/(state.at<float>(2) - state.at<float>(0));
-        double k2 = (state.at<float>(7) -  state.at<float>(5))/(state.at<float>(6) - state.at<float>(4));
+        double k1 = ((float)l.getLeft()[3] -   (float)l.getLeft()[1])/(Point((float)l.getLeft()[2] - (float)l.getLeft()[0]);
+        double k2 = ((float)l.getRight()[3] -  (float)l.getRight()[1])/((float)l.getRight()[2] - (float)l.getRight()[0]);
 
 //        cout << k1 << " " << k2 <<endl;
         double offset = 0;
@@ -137,15 +138,15 @@ int main() {
 
         cout << offset << endl;
 
-        measurement.at<float>(0) = l.getLeft()[0];
-        measurement.at<float>(1) = l.getLeft()[1];
-        measurement.at<float>(2) = l.getLeft()[2];
-        measurement.at<float>(3) = l.getLeft()[3];
-        measurement.at<float>(4) = l.getRight()[0];
-        measurement.at<float>(5) = l.getRight()[1];
-        measurement.at<float>(6) = l.getRight()[2];
-        measurement.at<float>(7) = l.getRight()[3];
-        kf.correct(measurement);
+//        measurement.at<float>(0) = l.getLeft()[0];
+//        measurement.at<float>(1) = l.getLeft()[1];
+//        measurement.at<float>(2) = l.getLeft()[2];
+//        measurement.at<float>(3) = l.getLeft()[3];
+//        measurement.at<float>(4) = l.getRight()[0];
+//        measurement.at<float>(5) = l.getRight()[1];
+//        measurement.at<float>(6) = l.getRight()[2];
+//        measurement.at<float>(7) = l.getRight()[3];
+//        kf.correct(measurement);
 //        cout<<state<<endl;
 
         imshow("img", frame);

@@ -235,9 +235,10 @@ double PID_Controller(double pos){
     double error=0-pos; //期望值与实际值的偏差，为预期调节量
     lastError=currentError;
     currentError=error;
-    sigmaError=sigmaError+error;
-    double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
-	cout << Ux <<endl;
+    //sigmaError=sigmaError+error;
+    //double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
+    double Ux=kp*error+kd*(currentError-lastError);
+	//cout << Ux <<endl;
     int output=(int)getOutput(Ux);
 	cout <<output <<endl;
     //在这里输出转动角度

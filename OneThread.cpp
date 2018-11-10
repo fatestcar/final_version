@@ -91,14 +91,14 @@ int main() {
     setIdentity(kf.measurementNoiseCov, Scalar::all(1e-3));
     setIdentity(kf.errorCovPost, Scalar::all(1));
 
-    String video_path = "./VID.mp4";
+//    String video_path = "./VID.mp4";
     VideoCapture capture(0);
 
     int frame_width = capture.get(CV_CAP_PROP_FRAME_WIDTH);
     int frame_height = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
 
     // Define the codec and create VideoWriter object.The output is stored in 'outcpp.avi' file.
-    VideoWriter video("outcpp.avi",CV_FOURCC('M','J','P','G'),10, Size(frame_width,frame_height));
+//    VideoWriter video("outcpp.avi",CV_FOURCC('M','J','P','G'),10, Size(frame_width,frame_height));
 
     bool first = false;
 
@@ -188,7 +188,7 @@ int main() {
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
         putText(frame, b, cvPoint(100,150),
                 FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
-        video.write(frame);
+//        video.write(frame);
 //        measurement.at<float>(0) = l.getLeft()[0];
 //        measurement.at<float>(1) = l.getLeft()[1];
 //        measurement.at<float>(2) = l.getLeft()[2];
@@ -231,6 +231,10 @@ double getOutput(double x){
  * 传入的pos为由视觉模块测定的前轮中心当前的位置
  */
 double PID_Controller(double pos){
+    int normal_speed = 6;
+    int turn_speed = 7;
+    int break_speed = 5;
+
     //设定对前轮中心位置的期望值为0，即前轮中心的位置应该在中轴线上
     double error=0-pos; //期望值与实际值的偏差，为预期调节量
     lastError=currentError;
@@ -244,30 +248,26 @@ double PID_Controller(double pos){
     //在这里输出转动角度
     if(output>=15 && max_count<=3){
         output=15;
-        controlLeft(FORWARD,6);
-        controlRight(FORWARD,6);
+        controlLeft(FORWARD,turn_speed);
+        controlRight(FORWARD,turn_speed);
         max_count=max_count+1;
     }else if(output<=-15 && max_count<=3){
         output=-15;
-        controlLeft(FORWARD,6);
-        controlRight(FORWARD,6);
+        controlLeft(FORWARD,turn_speed);
+        controlRight(FORWARD,turn_speed);
         max_count=max_count+1;
     }else if(max_count<=3 && (output<15||output>-15)){
-        controlLeft(FORWARD,5);
-        controlRight(FORWARD,5);
+        controlLeft(FORWARD,normal_speed);
+        controlRight(FORWARD,normal_speed);
     }
 
     if(max_count>3){
         max_count=0;
         output=0;
-        controlLeft(FORWARD,4);
-        controlRight(FORWARD,4);
+        controlLeft(FORWARD,break_speed);
+        controlRight(FORWARD,break_speed);
         //中断减速操作
     }
     turnTo(output);
-
-    //根据当前车的位置范围控制车速，避免在急转弯时车速过快
-
-//    delay(1000);
     return output;//返回要输出的角度
 }

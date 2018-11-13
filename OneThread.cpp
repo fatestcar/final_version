@@ -103,8 +103,8 @@ int main() {
     bool first = false;
 
     init();
-    controlLeft(FORWARD,5);
-    controlRight(FORWARD,5);
+    controlLeft(FORWARD,8);
+    controlRight(FORWARD,8);
 
     while(capture.isOpened()){
         Mat frame;
@@ -205,19 +205,6 @@ int main() {
     return 0;
 }
 
-double getOutput(double x){
-    double res=0.0;
-    if(x<(-1)*d_max){
-        //若超过左侧距离最大值，则记为最大值
-        x=(-1)*d_max;
-    }else if(x>d_max){
-        //若超过右侧距离最大值，则记为最大值
-        x=d_max;
-    }
-    //将PID算法对于距离的调整输出转化为对于转动角度的输出
-    res=x*2;// lmax/dmax
-    return res;
-}
 
 
 /*
@@ -232,42 +219,13 @@ double getOutput(double x){
  */
 double PID_Controller(double pos){
     //设定对前轮中心位置的期望值为0，即前轮中心的位置应该在中轴线上
-    double error=0-pos; //期望值与实际值的偏差，为预期调节量
+    double middle=(pos+0)/2;
+    double error=middle-pos; //期望值与实际值的偏差，为预期调节量
     lastError=currentError;
     currentError=error;
-    //sigmaError=sigmaError+error;
-    //double Ux=kp*error+ki*sigmaError+kd*(currentError-lastError);
     double Ux=kp*error+kd*(currentError-lastError);
-	//cout << Ux <<endl;
-    int output=(int)getOutput(Ux);
-	cout <<output <<endl;
-    //在这里输出转动角度
-    if(output>=15 && max_count<=3){
-        output=15;
-        controlLeft(FORWARD,6);
-        controlRight(FORWARD,6);
-        max_count=max_count+1;
-    }else if(output<=-15 && max_count<=3){
-        output=-15;
-        controlLeft(FORWARD,6);
-        controlRight(FORWARD,6);
-        max_count=max_count+1;
-    }else if(max_count<=3 && (output<15||output>-15)){
-        controlLeft(FORWARD,5);
-        controlRight(FORWARD,5);
-    }
-
-    if(max_count>3){
-        max_count=0;
-        output=0;
-        controlLeft(FORWARD,4);
-        controlRight(FORWARD,4);
-        //中断减速操作
-    }
-    turnTo(output);
-
-    //根据当前车的位置范围控制车速，避免在急转弯时车速过快
-
-//    delay(1000);
-    return output;//返回要输出的角度
+    int beta=2*(int)Ux;
+    turnTo(beta);
+    delay(1000);
+    return Ux*2;
 }

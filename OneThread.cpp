@@ -26,6 +26,9 @@ const double kp=0.6;
 const double ki=0.0;
 const double kd=0.25;
 
+const double kpos=0.75;
+const double kangle=0.25;
+
 double currentError=0.0;//当前时刻偏差
 double lastError=0.0;//上一时刻偏差
 double sigmaError=0.0;//累计偏差
@@ -217,13 +220,15 @@ int main() {
  *
  * 传入的pos为由视觉模块测定的前轮中心当前的位置
  */
-double PID_Controller(double pos){
+double PID_Controller(double pos,double mid_pos,double angle){
     //设定对前轮中心位置的期望值为0，即前轮中心的位置应该在中轴线上
-    double middle=(pos+0)/2;
+    mid_pos=0;
+    double middle=(pos+mid_pos)/2;
+    double angle_error=0-angle;
     double error=middle-pos; //期望值与实际值的偏差，为预期调节量
     lastError=currentError;
     currentError=error;
-    double Ux=kp*error+kd*(currentError-lastError);
+    double Ux=(kp*error+kd*(currentError-lastError))*kpos+angle_error*kangle;
     int beta=2*(int)Ux;
     turnTo(beta);
     delay(1000);
